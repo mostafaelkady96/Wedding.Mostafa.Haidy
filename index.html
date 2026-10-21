@@ -383,22 +383,17 @@ label.opt:has(input:checked){border-color:var(--gold);background:rgba(217,189,13
   <div class="divider"><svg><use href="#orn"/></svg></div>
 
   <section class="reveal">
-    <h2>هل ستشرفوننا؟</h2>
-    <p class="sub">نرجو تأكيد الحضور قبل الموعد بأسبوع</p>
+    <h2>شاركونا فرحتنا</h2>
+    <p class="sub">اكتبوا لنا كلمة حلوة توصلنا على طول</p>
     <form id="rsvp" novalidate>
       <label class="f" for="r-name">الاسم
         <input type="text" id="r-name" autocomplete="name" placeholder="اكتب اسمك">
       </label>
-      <p class="q">هل ستشرفنا بحضوركم؟</p>
-      <div class="opts" role="radiogroup" aria-label="هل ستشرفنا بحضوركم">
-        <label class="opt"><input type="radio" name="att" id="r-yes" value="yes" checked>سأحضر بكل سرور</label>
-        <label class="opt"><input type="radio" name="att" id="r-no" value="no">أعتذر عن الحضور</label>
-      </div>
-      <label class="f" for="r-msg">تهنئة للعروسين
+      <label class="f" for="r-msg">رسالتك للعروسين
         <textarea id="r-msg" placeholder="اكتب تهنئتك لمصطفى وهايدي"></textarea>
       </label>
-      <p class="err" id="r-err" hidden>اكتب اسمك الأول عشان نعرف التأكيد من مين</p>
-      <a class="btn" id="r-send" href="#" target="_blank" rel="noopener">إرسال التأكيد</a>
+      <p class="err" id="r-err" hidden>اكتب اسمك ورسالتك الأول</p>
+      <a class="btn" id="r-send" href="#" target="_blank" rel="noopener">إرسال الرسالة</a>
       <p class="note">هيفتح واتساب برسالتك جاهزة، اضغط إرسال هناك</p>
     </form>
   </section>
@@ -593,15 +588,12 @@ label.opt:has(input:checked){border-color:var(--gold);background:rgba(217,189,13
   /* ---------- RSVP via WhatsApp ---------- */
   var nameI = document.getElementById("r-name"), msgI = document.getElementById("r-msg"), send = document.getElementById("r-send"), err = document.getElementById("r-err");
   function build(){
-    var yes = document.getElementById("r-yes").checked;
-    var txt = "تأكيد حضور فرح مصطفى وهايدي 💍\nالاسم: " + (nameI.value.trim()||"-") +
-      "\nالحضور: " + (yes ? "سأحضر بكل سرور" : "أعتذر عن الحضور") +
-      (msgI.value.trim() ? "\nالتهنئة: " + msgI.value.trim() : "");
+    var txt = "رسالة لمصطفى وهايدي 💍\nمن: " + (nameI.value.trim()||"-") + "\n" + msgI.value.trim();
     send.href = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(txt);
   }
-  ["input","change"].forEach(function(t){ document.getElementById("rsvp").addEventListener(t, function(){ build(); if (nameI.value.trim()) err.hidden = true; }); });
+  ["input","change"].forEach(function(t){ document.getElementById("rsvp").addEventListener(t, function(){ build(); if (nameI.value.trim() && msgI.value.trim()) err.hidden = true; }); });
   ["focusin"].forEach(function(t){ document.getElementById("rsvp").addEventListener(t, function(){ if (auto) setAuto(false); }); });
-  send.addEventListener("click", function(e){ if (!nameI.value.trim()){ e.preventDefault(); err.hidden = false; nameI.focus(); return; } build(); });
+  send.addEventListener("click", function(e){ if (!nameI.value.trim() || !msgI.value.trim()){ e.preventDefault(); err.hidden = false; (nameI.value.trim() ? msgI : nameI).focus(); return; } build(); });
   document.getElementById("rsvp").addEventListener("submit", function(e){ e.preventDefault(); });
   build();
 })();
